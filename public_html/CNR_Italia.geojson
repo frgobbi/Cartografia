@@ -1,0 +1,11 @@
+{ 
+	"type": "FeatureCollection",
+		"features": 
+		[ 
+		{ "type": "Feature", "properties": { "Popup": "IRPI-CNR di Cosenza" }, "geometry": { "type": "Point", "coordinates": [ 16.21915709999996 ,39.3277825 ] } },
+		{ "type": "Feature", "properties": { "Popup": "IRPI-CNR di Bari" }, "geometry": { "type": "Point", "coordinates": [ 16.88221120000003, 41.1122236 ] } },
+		{ "type": "Feature", "properties": { "Popup": "IRPI-CNR di Perugia" }, "geometry": { "type": "Point", "coordinates": [ 12.363586127758026, 43.09344450421002 ] } },
+		{ "type": "Feature", "properties": { "Popup": "IPI-CNR di Torino" }, "geometry": { "type": "Point", "coordinates": [ 7.638289999999984, 45.0162 ] } },		
+		{ "type": "Feature", "properties": { "Popup": "IRPI-CNR di Padova"}, "geometry": { "type": "Point", "coordinates": [ 11.9489, 45.6958 ] } }
+	] 
+}

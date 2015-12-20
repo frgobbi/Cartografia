@@ -1,0 +1,650 @@
+<html>
+
+    <head>
+        <title>Mappa</title>
+
+        <meta charset="utf-8" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.css">
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+        <link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="librerie/MarkerCluster.css" />
+        <link rel="stylesheet" href="librerie/MarkerCluster.css" />
+        <link rel="stylesheet" href="librerie/leaflet.extra-markers.css">
+        <link rel="stylesheet" href="librerie/font-awesome.css">
+        <link rel="stylesheet" href="librerie/font-awesome.min.css">
+        <!-- Importazione del file contente il codice css della libreria C3.js -->
+        <link href="librerie/c3/c3.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="librerie/EasyButton/src/easy-button.css">
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+        <script src="http://code.jquery.com/jquery-2.1.4.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="librerie/leaflet.js"></script>
+        <script src="librerie/leaflet.markercluster.js"></script>
+        <script src="librerie/jquery-2.1.1.min.js"></script>
+        <script src="librerie/leaflet.markercluster.js"></script>
+        <script src="librerie/leaflet.extra-markers.js"></script>
+        <!-- Importazione del codice Javascript delle librerie C3.js e D3.js -->
+        <script src="librerie/d3/d3.min.js" charset="utf-8"></script>
+        <script src="librerie/c3/c3.min.js"></script>
+        <!-- Importazione del codice Javascript della libreria "JQuery", utilizzata per le chiamate Ajax e per altre funzioni -->
+        <script src="librerie/EasyButton/src/easy-button.js"></script>
+
+
+        <style type="text/css">
+            @font-face {
+                font-family: "myfont";
+                src: url("librerie/fontawesome-webfont.woff") format('woff');
+                font-weight: bold;
+            }
+
+            @font-face {
+                font-family: "myfont";
+                src: url("libreire/fontawesome-webfont.woff2") format('woff2');
+                font-weight: bold;
+            }
+
+            @font-face {
+                font-family: 'font_name';
+                src: url('librerie/fontawesome-webfont.ttf') format('truetype');
+                ;
+            }
+
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            html,
+            body,
+            #map {
+                height: 100%;
+            }
+
+            #popupBox {
+                display: none;
+                position: relative;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 50px;
+                width: 98%;
+                height: 95%;
+                color: #000000;
+                border: 5px solid #4E93A2;
+                -moz-border-radius: 8px;
+                -webkit-border-radius: 8px;
+                background-color: #FFFFFF;
+                z-index: 1000;
+                overflow-y: auto;
+            }
+
+            #overlay {
+                display: none;
+                opacity: 0.5;
+                background-color: black;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                z-index: 999;
+            }
+
+            #tabella{
+                height:250px;
+                width:350px;
+                overflow-y: auto;
+            }
+
+
+        </style>
+
+        <style type="text/css">
+            #chart {
+                min-height: 500px;
+            }
+
+            h2 {
+                text-align: center;
+                font-family: "Comic Sans MS";
+            }
+
+
+            #export {
+                visibility: hidden;
+                color: white;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div id="map">
+            <div id="popupBox">
+                <div class="col-sm-1 col-sm-offset-4">
+
+                </div>
+                <br>
+                <br>
+                <!-- Div contenente il grafio -->
+                <div id="chart">
+                </div>
+                <div class="col-sm-4 col-sm-offset-1" id="ChangeType">
+                    <div class="row">
+                        <h2>TIPOLOGIE DI GRAFICO</h2>
+                    </div>
+
+                    <div class="row">
+                        <button class="btn btn-primary btn-block" id="ChartLine">Grafico a linea </button>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary btn-block" id="ChartBar">Grafico a Barre </button>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary btn-block" id="ChartSpline">Grafico Spline </button>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary btn-block" id="ChartArea"> Grafico Area </button>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary btn-block" id="ScatterPlot">Scatter Plot </button>
+                    </div>
+
+                    <div class="row">
+                        <a href="#" class="btn btn-primary btn-block" id="export"><i class="fa fa-download"></i>   Esporta la tabella in CSV</a>
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="row" id="DataTable">
+                        <h2>TABELLA SELEZIONE</h2>
+                    </div>
+
+                    <div class="row" id="tabella">
+                    </div>
+
+
+                </div>
+
+            </div>     
+
+            <script>
+                var circle;
+                var coordinates;
+                var Bpopup = "<button class=\"btn btn-primary\" id=\"Ppopup\"  onclick=\"GPopup()\" >Calcola</button>"
+
+                var chart;
+                var rendered = false;
+                var viewData;
+                var link = "Joint.php";
+
+                function GPopup() {
+
+                    $('#overlay').fadeIn('slow');
+                    $('#popupBox').fadeIn('slow');
+                    $('#map').off('click');
+                    console.log(rendered);
+                    avviaChiamata();
+                    console.log(rendered);
+                    $('#overlay, .deleteMeetingCancel').click(function () {
+                        $('#overlay').fadeOut('slow');
+                        $('#popupBox').fadeOut('slow');
+                        $('#popupContent').fadeOut('slow');
+                        map.dragging.enable();
+
+                    });
+                    map.dragging.disable();
+                }
+
+
+                var cities = new L.LayerGroup();
+                $(document).ready(function () {
+                    $.ajax({
+                        type: 'GET',
+                        dataType: "json",
+                        data: {
+                            id: 1
+                        },
+                        url: 'Joint.php',
+                        success: function (data) {
+                               
+                            //$.getJSON("C:\Xampp\htdocs\cartografia\TestGeojson.php",function(data){
+                            var rodents = L.geoJson(data, {
+                                pointToLayer: function (feature, latlng) {
+                                    var marker = L.marker(latlng, {
+                                        icon: L.ExtraMarkers.icon({
+                                            icon: 'glyphicon-tint',
+                                            shape: 'circle',
+                                            prefix: 'glyphicon',
+                                            markerColor: 'orange'
+                                        })
+                                    })
+                                            .bindPopup("Regione: " + feature.properties.Region + "<br>" + "Longitudine: " + feature.properties.Longitude + "<br>" + "Latitudine: " + feature.properties.Latitude + "<br>" + Bpopup);                                    return marker;
+                                }
+                            });
+                            var clusters = L.markerClusterGroup().addTo(cities);
+                            clusters.addLayer(rodents);
+                            map.addLayer(clusters);
+                            console.log(data);
+                        }
+                    });
+                });
+
+
+
+                var mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ',
+                        mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                        'Imagery © <a href="http://mapbox.com">Mapbox</a>';
+
+
+
+                var streets = L.tileLayer(mbUrl, {
+                    id: 'mapbox.streets',
+                    attribution: mbAttr
+                }),
+                        grayscale = L.tileLayer(mbUrl, {
+                            id: 'mapbox.light',
+                            attribution: mbAttr
+                        }),
+                        satellite = L.tileLayer(mbUrl, {
+                            id: 'mapbox.satellite',
+                            attribution: mbAttr
+                        }),
+                        //pirates = L.tileLayer(mbUrl, {id: 'mapbox.pirates', attribution: mbAttr}),
+                        //dark = L.tileLayer(mbUrl, {id: 'mapbox.dark', attribution: mbAttr}),
+                        //comic = L.tileLayer(mbUrl, {id: 'mapbox.comic', attribution: mbAttr}),
+                        //run = L.tileLayer(mbUrl, {id: 'mapbox.run-bike-hike', attribution: mbAttr}),
+                        //wheatpaste = L.tileLayer(mbUrl, {id: 'mapbox.wheatpaste', attribution: mbAttr}),
+                        streetssatellite = L.tileLayer(mbUrl, {
+                            id: 'mapbox.streets-satellite',
+                            attribution: mbAttr
+                        }),
+                        //streetsbasic = L.tileLayer(mbUrl, {id: 'mapbox.streets-basic', attribution: mbAttr}),
+                        //emerald = L.tileLayer(mbUrl, {id: 'mapbox.emerald', attribution: mbAttr}),
+                        outdoors = L.tileLayer(mbUrl, {
+                            id: 'mapbox.outdoors',
+                            attribution: mbAttr
+                        }); //se si tolgono i commenti cambiare punto e virgola
+                        //pencil = L.tileLayer(mbUrl, {id: 'mapbox.pencil', attribution: mbAttr}),
+                        //highcontrast = L.tileLayer(mbUrl, {id: 'mapbox.high-contrast', attribution: mbAttr});
+
+
+
+                var map = L.map('map', {
+                    zoom: 10,
+                    layers: [cities, streets]
+                });
+                map.options.minZoom = 3; //One World Value
+                map.options.maxZoom = 18; //18 Max Value
+
+
+
+                map.on('popupopen', function (e) {
+
+                    coordinates = e.popup.getLatLng();
+                    console.log(coordinates);
+
+                    //circle = circle = L.circle(cordinates, 10000).addTo(map);
+                });
+
+
+
+                /*var wms1 = L.tileLayer.wms('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Aste_fluviali.map', {
+                 format: 'image/png',
+                 transparent: true,
+                 layers: 'ID.RETICOLOIDROGRAFICO'
+                 }).addTo(map),
+             
+                 wms2 = L.tileLayer.wms('http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Corine_Land_Cover2006.map&', {
+                 format: 'image/png',
+                 transparent: true,
+                 layers: 'CS.CLC2006'
+                 }).addTo(map);*/
+
+                var baseLayers = {
+                    "Grayscale": grayscale,
+                    "Streets": streets,
+                    "Satellite": satellite,
+                    //"Pirates": pirates,
+                    //"Dark": dark,
+                    //"Comic": comic,
+                    //"Run-bike-hike": run,
+                    //"Wheatpaste": wheatpaste,
+                    "Streets-satellite": streetssatellite,
+                    //"Streets-basic": streetsbasic,
+                    //"Emerald": emerald,
+                    "Outdoors": outdoors,
+                    //"Pencil": pencil,
+                    //"High-contrast": highcontrast
+                };
+
+                var overlays = {
+                    "Cities": cities
+                            /*"Reticolo Idrogeologico": wms1,
+                             "Prova wms": wms2*/
+
+                };
+
+                L.control.layers(baseLayers, overlays).addTo(map);
+
+                //GEOLOCALIZZAZIONE
+                function onLocationFound(e) {
+                    var radius = e.accuracy / 2;
+                    L.marker(e.latlng, {
+                        icon: L.ExtraMarkers.icon({
+                            icon: 'fa-street-view ',
+                            shape: 'circle',
+                            prefix: 'fa',
+                            markerColor: 'blue'
+                        })
+                    }).addTo(map)
+                            .bindPopup("You are within " + radius + " meters from this point");
+                    L.circle(e.latlng, radius).addTo(map);
+                }
+
+                function onLocationError(e) {
+                    alert(e.message);
+                }
+
+                map.on('locationfound', onLocationFound);
+                map.on('locationerror', onLocationError);
+
+
+
+                $.getJSON("CNR_Italia.geojson", function (data) {
+                    console.log(data);
+                    var dati = data;
+                    for (var i = 0; i < dati.features.length; i++) {
+                        L.marker([dati.features[i].geometry.coordinates[1], dati.features[i].geometry.coordinates[0]], {
+                            icon: L.ExtraMarkers.icon({
+                                icon: 'fa-building',
+                                shape: 'circle',
+                                prefix: 'fa',
+                                markerColor: 'blue-dark'
+                            })
+                        }).addTo(map).bindPopup("" + dati.features[i].properties.Popup + "<br>" + Bpopup);
+                    }
+                });
+
+
+
+                map.locate({
+                    setView: true
+                });
+
+                L.easyButton({
+                    states: [{
+                            stateName: 'unloaded',
+                            icon: 'fa-location-arrow',
+                            title: 'load image',
+                            onClick: function (control) {
+                                control.state("loading");
+                                control._map.on('locationfound', function (e) {
+                                    this.setView(e.latlng, 17);
+                                    control.state('loaded');
+                                });
+                                control._map.on('locationerror', function () {
+                                    control.state('error');
+                                });
+                                control._map.locate()
+                            }
+                        }]
+                }).addTo(map);
+                /*____________________________________________________________________________________________________________________________________________________________________________________
+             
+             
+             
+                 _____________________________________________________________________________________________________________________________________________________________________________________*/
+
+
+
+                function generaGrafico(link) {
+                    table = "";
+                    document.getElementById("tabella").innerHTML = table;
+                    chart = c3.generate({
+                        //The chart is append into the div with id "chart".
+                        bindto: '#chart',
+                        ////Information about the data of the chart.
+                        data: {
+                            //Xaxis data name.
+                            x: 'date',
+                            //Date format.
+                            xFormat: '%Y-%m-%d %H:%M:%S',
+                            //Url of the php file that generate the data of the chart.
+                            url: link,
+                            //Definition of the type of chart.
+                            type: 'line',
+                        },
+                        //The chart can be zoomable.
+                        zoom: {
+                            enabled: true,
+                        },
+                        //Information about the subchart.
+                        subchart: {
+                            //The subchart is visible.
+                            show: true,
+                            //This method is associated at the event "brush".
+                            onbrush: function (domain) {
+                                //Creation of the table with the selected data of the chart.
+                                document.getElementById('export').style.visibility = "visible";
+                                selezione = chart.internal.filterByXDomain(chart.data(), domain);
+                                //The "table" variabile contain the code of the html table.
+                                var table = '<table class="table table-bordered" id="table"><tr>'
+                                ////Creation of the header.////
+                                table += '<th>Data</th>'
+                                for (i = 0; i < selezione.length; i++) {
+                                    //The values of the header will be get from the attribute "id" of each element of the array "selezione".
+                                    table += '<th>' + selezione[i].id + '</th>'
+                                }
+                                table += '</tr>'
+                                ////Population of the table.////
+                                for (i = 0; i < selezione[0].values.length; i++) {
+                                    table += '<tr>'
+                                    j = 0;
+                                    //Formatting of the dates in the table.
+                                    table += '<td>' + selezione[j].values[i].x.toString().substring(4, 24) + '</td>'
+                                    while (j < selezione.length) {
+                                        table += '<td>' + selezione[j].values[i].value + '</td>'
+                                        j++;
+                                    }
+                                    table += '</tr>'
+                                }
+                                //Closing table.
+                                table += '</table>';
+                                //The table will be append in the div with id "table".
+                                document.getElementById("tabella").innerHTML = table;
+                            },
+                        },
+                        //Pattern of color of the data represented on the chart.
+                        color: {
+                            pattern: ['#FF0000', '#1f77b4', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd',
+                                '#c5b0d5', '#8c564b', '#ff7f0e', '#e377c2', '#c49c94', '#7f7f7f', '#c7c7c7', '#bcbd22', '#f7b6d2', '#17becf',
+                                '#9edae5', '#dbdb8d'
+                            ]
+                        },
+                        ////Formatting of the axis values.////
+                        axis: {
+                            //Formatting of the xaxis values.
+                            x: {
+                                //The type of the values on xAxis is "timeseries".
+                                type: 'timeseries',
+                                label: 'Tempo',
+                                tick: {
+                                    //Date format.
+                                    format: '%Y-%m-%d %H:%M:%S',
+                                    //The labels on the xaxis are rotated of 90°.
+                                    rotate: 90,
+                                    culling: {
+                                        //Max interval beetwen the values of the xAxis.
+                                        max: 10,
+                                    },
+                                }
+                            },
+                            y: {
+                                label: 'Piovuta (ml)',
+                            },
+                        },
+                        point: {
+                            show: false,
+                        },
+                        onrendered: function () {
+                            rendered = true;
+                            /*
+                             if (!rendered) {
+                             chart.transform('line');
+                             rendered = true;
+                             }
+                             */
+                        },
+                    });
+                    //The div "ChangeType" and "DataTable" will be visible if there aren't problem with the creation of the chart.
+                    document.getElementById('ChangeType').style.visibility = "visible";
+                    document.getElementById('DataTable').style.visibility = "visible";
+                }
+    ////Ajax call////
+    //There are some methods to do Ajax calls in the JQuery Library, in this case we use the method "$.get()".
+
+    //$(document).ready(function() {
+                /*
+                 $.get(link, function() {
+                 ////Creation of the chart with the method "generaGrafico()".////
+                 generaGrafico(link);
+                 })
+                 .fail(function() {
+                 //If there are some problems with the Ajax call a message error will be generated.
+                 alert("Si e' verificato un errore con la chiamata Ajax, impossibile generare il grafico!");
+                 })
+                 */
+                /*We can do an Ajax call also with the method "$.ajax()" of the c3.js library, comment the "$.get()" method and uncomment
+                 the code below to try it.*/
+
+    //This function starts the Ajax Call.
+                function avviaChiamata() {
+
+                    $.ajax({
+                        //Type of Ajax call (GET).
+                        type: "GET",
+                        //URL of the php resource, that generate the data of the chart.
+                        url: link,
+                        timeout: 5000,
+                        data: {
+                            id: 3,
+                            lat: coordinates.lat,
+                            lng: coordinates.lng,
+                            radius: 1
+                        },
+                        //In case of success, the chart will be generated.
+                        success: function () {
+
+                            generaGrafico("" + link + "?" + "id=2" + "&" + "lat=" + coordinates.lat + "&" + "lng=" + coordinates.lng + "&radius=" + "1");
+                            rendered = true;
+
+                        },
+                        error: function () {
+                            //If there are some problems with the Ajax call a message error will be generated.
+                            alert("Si e' verificato un errore con la chiamata Ajax, impossibile generare il grafico!");
+                        },
+                        //End of the Ajax call.
+                    });
+
+                    //JQuery functions to change the type of chart.
+                    //Change the chart in a line chart.
+                    $("#ChartLine").click(function () {
+                        viewData = prompt("Di quale dato si vuol cambiare la visualizzazione? (nulla per tutti): ");
+                        if (viewData != null) {
+                            chart.transform('line', viewData);
+                        }
+                    });
+                    //Change the chart in a bar chart.
+                    $("#ChartBar").click(function () {
+
+                        viewData = prompt("Di quale dato si vuol cambiare la visualizzazione? (nulla per tutti): ");
+                        if (viewData != null) {
+                            chart.transform('bar', viewData);
+                        }
+                    });
+                    //Change the chart in a spline chart.
+                    $("#ChartSpline").click(function () {
+
+                        viewData = prompt("Di quale dato si vuol cambiare la visualizzazione? (nulla per tutti): ");
+                        if (viewData != null) {
+                            chart.transform('spline', viewData);
+                        }
+                    });
+                    //Change the chart in a area chart.
+                    $("#ChartArea").click(function () {
+                        viewData = prompt("Di quale dato si vuol cambiare la visualizzazione? (nulla per tutti): ");
+                        if (viewData != null) {
+                            chart.transform('area', viewData);
+                        }
+
+                    });
+                    //Change the chart in a scatterplot.
+                    $("#ScatterPlot").click(function () {
+                        viewData = prompt("Di quale dato si vuol cambiare la visualizzazione? (nulla per tutti): ");
+                        if (viewData != null) {
+                            chart.transform('scatter', viewData);
+                        }
+                    });
+                    //Operation to do if the user request to save che table as CSV.
+                    $("#export").on('click', function (event) {
+                        console.log(event.target);
+                        //Get table
+                        var table = $("#table")[0];
+                        console.log(table);
+                        //Get number of rows/columns
+                        var rowLength = table.rows.length;
+                        console.log(rowLength)
+                        var colLength = table.rows[0].cells.length;
+                        //Declare string to fill with table data
+                        var tableString = "";
+                        //Get column headers
+                        for (var i = 0; i < colLength; i++) {
+                            tableString += table.rows[0].cells[i].innerHTML.split(",").join("") + ",";
+                        }
+                        tableString = tableString.substring(0, tableString.length - 1);
+                        tableString += "\r\n";
+                        //Get row data
+                        for (var j = 1; j < rowLength; j++) {
+                            for (var k = 0; k < colLength; k++) {
+                                tableString += table.rows[j].cells[k].innerHTML.split(",").join("") + ",";
+                            }
+                            tableString += "\r\n";
+                            console.log(tableString);
+                        }
+                        //Save file
+                        if (navigator.appName == "Microsoft Internet Explorer") {
+                            tableString = 'sep=,\r\n' + tableString;
+                            myFrame.document.open("text/html", "replace");
+                            myFrame.document.write(tableString);
+                            myFrame.document.close();
+                            myFrame.focus();
+                            myFrame.document.execCommand('SaveAs', true, 'data.csv');
+                        } else {
+                            csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(tableString);
+                            $(event.target).attr({
+                                'href': csvData,
+                                'target': '_blank',
+                                'download': 'tabellaDati.csv'
+                            });
+                        }
+                    });
+
+                    rendered = true;
+                }
+            </script>
+
+            <div id="overlay"></div>
+        </div>
+    </body>
+</html>
